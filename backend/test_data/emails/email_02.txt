@@ -1,0 +1,8 @@
+From: bob@example.com
+To: reviewer@example.com
+Subject: Reaction Report - Case 002
+
+Mild headache reported after medication Y. Symptoms resolved after 12 hours. No other issues.
+
+Regards,
+Bob

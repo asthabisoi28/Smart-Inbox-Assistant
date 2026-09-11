@@ -1,0 +1,8 @@
+From: carol@example.com
+To: reviewer@example.com
+Subject: Adverse Reaction Report - Case 003
+
+Patient developed nausea and vomiting after taking Drug Z. Symptoms began 4 hours post-dose and lasted for 8 hours. No previous episodes reported.
+
+Regards,
+Carol

@@ -1,0 +1,47 @@
+<div class="processed-container">
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">Processed Documents</h1>
+      <p class="page-subtitle">Archive of documents accepted or overridden by human reviewers.</p>
+    </div>
+  </div>
+
+  <div class="table-card">
+    <div *ngIf="isLoading" class="loading-state">
+      <div class="spinner"></div>
+      <p>Loading processed documents archive...</p>
+    </div>
+
+    <div *ngIf="!isLoading && documents.length === 0" class="empty-state">
+      <h3>No processed documents yet</h3>
+      <p>Documents that are accepted or overridden will appear in this archive.</p>
+    </div>
+
+    <div *ngIf="!isLoading && documents.length > 0" class="table-responsive">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Subject</th>
+            <th scope="col">Sender</th>
+            <th scope="col">Category</th>
+            <th scope="col">Review Outcome</th>
+            <th scope="col" style="text-align: center;">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let doc of documents" (click)="openReview(doc)" class="clickable-row">
+            <td><span class="id-pill">DOC-00{{ doc.id }}</span></td>
+            <td><strong>{{ doc.subject || doc.filename }}</strong></td>
+            <td>{{ doc.sender || 'Not stated' }}</td>
+            <td><span [class]="getCategoryBadgeClass(doc.primary_category)">{{ doc.primary_category }}</span></td>
+            <td><span [class]="getReviewStatusBadgeClass(doc.review_status)">{{ doc.review_status }}</span></td>
+            <td style="text-align: center;">
+              <button class="btn btn-view" (click)="$event.stopPropagation(); openReview(doc)">View</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

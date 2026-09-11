@@ -1,0 +1,8 @@
+From: dave@example.com
+To: reviewer@example.com
+Subject: Adverse Reaction Report - Case 004
+
+Patient reported mild dizziness after taking medication A. Symptoms resolved within 6 hours. No other side effects noted.
+
+Regards,
+Dave

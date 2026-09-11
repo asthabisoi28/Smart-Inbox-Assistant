@@ -1,0 +1,19 @@
+Subject: ACTION REQUIRED: Scheduled Password Reset Notice for Corporate Account
+From: no-reply-it-servicedesk@health-enterprise.net
+To: staff-user-492@health-enterprise.net
+Date: 2026-09-10
+
+Notice from Enterprise IT Infrastructure Service Desk:
+
+Your corporate domain password for user account 'staff-user-492' is scheduled to expire in 5 days.
+
+To ensure uninterrupted access to internal email, VPN, and corporate portal services, please update your password by logging into the Self-Service Password Reset Portal at https://identity.health-enterprise.net/reset.
+
+Password Requirements:
+- Minimum 12 characters
+- Must contain uppercase, lowercase, numbers, and special symbols
+- Cannot match your previous 4 passwords
+
+If you did not request or expect this notification, please contact the IT Helpdesk at ext. 4357.
+
+This is an automated system notification. Please do not reply directly to this message.

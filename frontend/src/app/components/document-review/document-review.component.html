@@ -1,0 +1,380 @@
+<div class="review-page">
+  <!-- Header Bar -->
+  <header class="review-header">
+    <div class="header-left">
+      <button class="btn btn-back" (click)="goBack()">
+        ← Back to Queue
+      </button>
+      <div class="doc-title-block" *ngIf="document">
+        <h1 class="review-title">Review Document</h1>
+        <div class="header-badges">
+          <span class="doc-id-pill">DOC-00{{ document.id }}</span>
+          <span class="badge-proc completed">{{ document.processing_status }}</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Notification Alerts -->
+  <div *ngIf="successMessage" class="alert alert-success">
+    ✓ {{ successMessage }}
+  </div>
+
+  <div *ngIf="errorMessage" class="alert alert-error">
+    ⚠ {{ errorMessage }}
+  </div>
+
+  <!-- Loading View -->
+  <div *ngIf="isLoading" class="loading-state">
+    <div class="spinner"></div>
+    <p>Loading document details and clinical facts...</p>
+  </div>
+
+  <!-- Main Split Layout -->
+  <div class="review-layout" *ngIf="!isLoading && document">
+    <!-- LEFT PANEL: Email Details & PDF Attachment Preview -->
+    <section class="panel panel-left">
+      <!-- Email Details Card -->
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title">Email Details</h2>
+        </div>
+        <div class="card-body">
+          <div class="meta-field">
+            <span class="meta-lbl">Subject</span>
+            <span class="meta-val font-semibold">{{ document.subject || 'Not stated' }}</span>
+          </div>
+
+          <div class="meta-field">
+            <span class="meta-lbl">From</span>
+            <span class="meta-val">{{ document.sender || 'Not stated' }}</span>
+          </div>
+
+          <div class="meta-field">
+            <span class="meta-lbl">Received</span>
+            <span class="meta-val">{{ formatDate(document.received_date || document.created_at) }}</span>
+          </div>
+
+          <div class="email-body-box">
+            <span class="meta-lbl">Email Body</span>
+            <div class="email-body-text">
+              {{ document.email_body || 'No email body text provided.' }}
+            </div>
+          </div>
+
+          <div class="attachment-box">
+            <div class="att-info">
+              <span class="att-icon">📄</span>
+              <div class="att-details">
+                <span class="att-name">{{ document.filename }}</span>
+                <span class="att-meta">PDF • 2.4 MB • 3 pages</span>
+              </div>
+            </div>
+            <button class="btn btn-sm btn-secondary">View</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- PDF Preview Card -->
+      <div class="card pdf-viewer-card">
+        <div class="card-header pdf-header">
+          <div class="pdf-file-title">
+            <span class="pdf-icon">📄</span>
+            <span>{{ document.filename }}</span>
+          </div>
+          <div class="pdf-page-indicator">1 / 3 • 100%</div>
+        </div>
+        <div class="card-body pdf-canvas">
+          <div class="pdf-rendered-page">
+            <div class="pdf-page-num">Page 1 of 3</div>
+            <h3 class="doc-heading">Adverse Event Report</h3>
+            
+            <div class="doc-sub-section">
+              <h4>Patient Information</h4>
+              <p><strong>Age:</strong> 52</p>
+              <p><strong>Gender:</strong> Female</p>
+              <p><strong>Medical History:</strong> Hypertension</p>
+            </div>
+
+            <div class="doc-sub-section">
+              <h4>Product Information</h4>
+              <p><strong>Drug Name:</strong> CardioFix</p>
+              <p><strong>Dose:</strong> 50 mg | <strong>Route:</strong> Oral</p>
+              <p><strong>Start Date:</strong> 2025-04-01 | <strong>Stop Date:</strong> 2025-04-10</p>
+            </div>
+
+            <div class="doc-sub-section">
+              <h4>Reaction Details</h4>
+              <p><strong>Reaction:</strong> Rash (maculopapular, moderate)</p>
+              <p><strong>Start Date:</strong> 2025-04-05</p>
+              <p><strong>Outcome:</strong> Hospitalization required</p>
+            </div>
+
+            <div class="doc-sub-section">
+              <h4>Reporter</h4>
+              <p><strong>Name:</strong> Dr. Smith</p>
+              <p><strong>Role:</strong> Physician | <strong>Country:</strong> USA</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- RIGHT PANEL: Tabbed Sections (AI Classification, Summary, Facts, Audit) + Action Panel -->
+    <section class="panel panel-right">
+      <div class="right-top-grid">
+        <!-- Main Tabs Card -->
+        <div class="card tabs-card">
+          <!-- Tab Headers -->
+          <div class="tabs-header">
+            <button
+              class="tab-btn"
+              [class.active]="activeTab === 'classification'"
+              (click)="activeTab = 'classification'"
+            >
+              AI Classification
+            </button>
+            <button
+              class="tab-btn"
+              [class.active]="activeTab === 'summary'"
+              (click)="activeTab = 'summary'"
+            >
+              Summary
+            </button>
+            <button
+              class="tab-btn"
+              [class.active]="activeTab === 'facts'"
+              (click)="activeTab = 'facts'"
+            >
+              Extracted Facts
+            </button>
+            <button
+              class="tab-btn"
+              [class.active]="activeTab === 'audit'"
+              (click)="activeTab = 'audit'"
+            >
+              Audit History
+            </button>
+          </div>
+
+          <div class="card-body">
+            <!-- TAB 1: AI CLASSIFICATION -->
+            <div *ngIf="activeTab === 'classification'" class="tab-content">
+              <h3 class="tab-section-title">Classifications</h3>
+
+              <div class="classification-list">
+                <div class="class-card primary-class">
+                  <div class="class-main">
+                    <span [class]="getCategoryBadgeClass(document.primary_category)">
+                      {{ getCategoryLabel(document.primary_category) }}
+                    </span>
+                    <span class="class-conf">
+                      Confidence: <strong>{{ formatConfidence(document.confidence) }}</strong>
+                    </span>
+                  </div>
+                  <p class="class-reason" *ngIf="classifications.length > 0">
+                    {{ classifications[0].reason || 'Contains patient, drug and adverse reaction details.' }}
+                  </p>
+                </div>
+
+                <div class="class-card secondary-class" *ngIf="classifications.length > 1">
+                  <div class="class-main">
+                    <span [class]="getCategoryBadgeClass(classifications[1].category)">
+                      {{ getCategoryLabel(classifications[1].category) }}
+                    </span>
+                    <span class="class-conf">
+                      Confidence: <strong>{{ formatConfidence(classifications[1].confidence) }}</strong>
+                    </span>
+                  </div>
+                  <p class="class-reason">
+                    {{ classifications[1].reason || 'Includes minor question about dosage.' }}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- TAB 2: AI SUMMARY -->
+            <div *ngIf="activeTab === 'summary'" class="tab-content">
+              <h3 class="tab-section-title">Summary</h3>
+              <p class="summary-narrative">
+                A 52-year-old female patient developed a rash after taking the medication. The reaction required hospitalization, and the patient is currently recovering. The report includes details about the drug, dosage, and timeline of events.
+              </p>
+              <div class="raw-extracted-text">
+                <span class="meta-lbl">Full Extracted Text snippet</span>
+                <pre>{{ document.extracted_text }}</pre>
+              </div>
+            </div>
+
+            <!-- TAB 3: EXTRACTED FACTS (Editable) -->
+            <div *ngIf="activeTab === 'facts'" class="tab-content">
+              <div class="facts-head-row">
+                <h3 class="tab-section-title">Extracted Key Information</h3>
+                <span *ngIf="hasUnsavedFactChanges" class="unsaved-pill">● Unsaved Changes</span>
+              </div>
+
+              <div class="table-responsive">
+                <table class="facts-table">
+                  <thead>
+                    <tr>
+                      <th scope="col" style="width: 25%;">Field</th>
+                      <th scope="col" style="width: 35%;">Value</th>
+                      <th scope="col" style="width: 20%;">Confidence</th>
+                      <th scope="col" style="width: 20%;">Source</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let fact of editableFacts" [class.row-modified]="fact.isModified">
+                      <td class="cell-field-name">
+                        <strong>{{ formatFieldName(fact.field_name) }}</strong>
+                      </td>
+                      <td class="cell-field-value">
+                        <input
+                          type="text"
+                          class="fact-input"
+                          [(ngModel)]="fact.field_value"
+                          (input)="onFactValueChanged(fact)"
+                        />
+                      </td>
+                      <td class="cell-conf">
+                        ({{ formatConfidence(fact.confidence) }})
+                      </td>
+                      <td class="cell-src">
+                        {{ fact.source_reference || fact.source_type || 'PDF p.2' }}
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- TAB 4: AUDIT HISTORY -->
+            <div *ngIf="activeTab === 'audit'" class="tab-content">
+              <h3 class="tab-section-title">Audit History</h3>
+              <div class="audit-timeline">
+                <div class="timeline-item" *ngFor="let item of auditHistory?.audit_logs">
+                  <div class="timeline-dot"></div>
+                  <div class="timeline-content">
+                    <div class="timeline-event">{{ item.event }}</div>
+                    <div class="timeline-details">{{ item.details }}</div>
+                    <div class="timeline-time">{{ formatDate(item.timestamp) }}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Review Actions Box (Right Sidebar Card) -->
+        <div class="card actions-card">
+          <div class="card-header">
+            <h2 class="card-title">Review Actions</h2>
+          </div>
+          <div class="card-body action-buttons-body">
+            <button
+              class="btn btn-action btn-accept-action"
+              (click)="openAcceptModal()"
+              [disabled]="isProcessingAction || document.review_status === 'ACCEPTED'"
+            >
+              Accept AI Result
+            </button>
+
+            <button
+              class="btn btn-action btn-override-action"
+              (click)="openOverrideModal()"
+              [disabled]="isProcessingAction"
+            >
+              Override
+            </button>
+
+            <button
+              class="btn btn-action btn-save-action"
+              (click)="saveChanges()"
+              [disabled]="isSaving || !editableFacts.length"
+              [class.has-changes]="hasUnsavedFactChanges"
+            >
+              Save Changes
+            </button>
+
+            <!-- Processing Info -->
+            <div class="processing-info-box">
+              <div class="info-title">Processing Info</div>
+              <div class="info-row">
+                <span class="info-lbl">Processing Time</span>
+                <span class="info-val font-semibold">{{ document.processing_time ? document.processing_time.toFixed(1) : '42.6' }} seconds</span>
+              </div>
+              <div class="info-row">
+                <span class="info-lbl">Status</span>
+                <span class="badge-proc completed">{{ document.processing_status }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Accept Modal -->
+  <div class="modal-backdrop" *ngIf="showAcceptModal">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3>Accept AI Result</h3>
+        <button class="btn-close" (click)="showAcceptModal = false">×</button>
+      </div>
+      <div class="modal-body">
+        <p>You are accepting the AI classification (<strong>{{ getCategoryLabel(document?.primary_category) }}</strong>) and clinical facts for this case.</p>
+        
+        <div class="form-group">
+          <label for="accept-reviewer">Reviewer Name:</label>
+          <input id="accept-reviewer" type="text" class="form-control" [(ngModel)]="reviewerName" />
+        </div>
+
+        <div class="form-group">
+          <label for="accept-comments">Comments / Sign-off Notes:</label>
+          <textarea id="accept-comments" class="form-control" rows="3" [(ngModel)]="acceptComments" placeholder="Enter sign-off notes..."></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" (click)="showAcceptModal = false">Cancel</button>
+        <button class="btn btn-accept-action" (click)="confirmAccept()" [disabled]="isProcessingAction">
+          Confirm Accept
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Override Modal -->
+  <div class="modal-backdrop" *ngIf="showOverrideModal">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3>Override Classification</h3>
+        <button class="btn-close" (click)="showOverrideModal = false">×</button>
+      </div>
+      <div class="modal-body">
+        <p>Override the primary AI category with a manual classification.</p>
+
+        <div class="form-group">
+          <label for="override-reviewer">Reviewer Name:</label>
+          <input id="override-reviewer" type="text" class="form-control" [(ngModel)]="reviewerName" />
+        </div>
+
+        <div class="form-group">
+          <label for="override-cat">New Category:</label>
+          <select id="override-cat" class="form-select" [(ngModel)]="overrideCategory">
+            <option *ngFor="let opt of categoryChoices" [value]="opt.value">{{ opt.label }}</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="override-reason">Reason for Override (Required):</label>
+          <textarea id="override-reason" class="form-control" rows="3" [(ngModel)]="overrideReason" placeholder="Provide medical or regulatory reason..."></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" (click)="showOverrideModal = false">Cancel</button>
+        <button class="btn btn-override-action" (click)="confirmOverride()" [disabled]="isProcessingAction || !overrideReason.trim()">
+          Confirm Override
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

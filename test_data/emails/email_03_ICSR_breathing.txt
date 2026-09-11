@@ -1,0 +1,19 @@
+Subject: Adverse Event Notification: Acute Dyspnea with PulmoMist Inhaler
+From: dr.alvarez@pulmonary-associates.com
+To: pv-intake@medsafety-central.com
+Date: 2026-09-03
+
+Dear Drug Safety Officer,
+
+I am submitting an Individual Case Safety Report regarding a 34-year-old male patient who experienced severe acute breathing difficulty (dyspnea) immediately following his first dose of PulmoMist inhaler (100mcg/actuation).
+
+The patient reported tight chest sensation and wheezing within 10 minutes of inhalation. Rescue bronchodilator treatment was administered at our urgent care facility, resulting in gradual symptom resolution. 
+
+Patient Age: 34 | Sex: Male
+Suspect Product: PulmoMist (Lot #PM-1182)
+Reaction: Acute dyspnea / paradoxical bronchospasm
+Outcome: Recovered following emergency intervention
+
+Best regards,
+Dr. Elena Alvarez
+Pulmonary Associates Medical Group

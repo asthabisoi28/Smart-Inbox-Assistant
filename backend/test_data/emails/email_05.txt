@@ -1,0 +1,8 @@
+From: eve@example.com
+To: reviewer@example.com
+Subject: Adverse Reaction Report - Case 005
+
+Patient experienced severe swelling of the lips after taking Medication B. Onset within 30 minutes, lasted 3 hours. No prior allergies.
+
+Regards,
+Eve

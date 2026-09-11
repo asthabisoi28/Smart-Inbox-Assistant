@@ -1,0 +1,8 @@
+From: alice@example.com
+To: reviewer@example.com
+Subject: Adverse Reaction Report - Case 001
+
+Patient experienced severe rash and itching after taking Medication X. Symptoms started within 2 hours and persisted for 24 hours. No prior history of similar reactions.
+
+Regards,
+Alice

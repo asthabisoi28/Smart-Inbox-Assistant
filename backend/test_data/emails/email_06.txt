@@ -1,0 +1,8 @@
+From: frank@example.com
+To: reviewer@example.com
+Subject: Adverse Reaction Report - Case 006
+
+Patient reported mild itching after using Medication C. Symptoms started after 3 hours and resolved within 10 hours. No other concerns.
+
+Regards,
+Frank

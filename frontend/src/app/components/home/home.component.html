@@ -1,0 +1,244 @@
+<div class="home-container">
+  <!-- Page Header -->
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">Smart Inbox Overview</h1>
+      <p class="page-subtitle">AI-assisted email triage & clinical document processing for Healthcare.</p>
+    </div>
+    <div class="header-actions">
+      <a routerLink="/queue" class="btn btn-primary">
+        Go to Document Queue →
+      </a>
+    </div>
+  </div>
+
+  <!-- Stat Metric Cards -->
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-icon icon-blue">📄</div>
+      <div class="stat-info">
+        <div class="stat-label">Total Documents</div>
+        <div class="stat-value">{{ totalDocs }}</div>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon icon-amber">⏳</div>
+      <div class="stat-info">
+        <div class="stat-label">Pending Review</div>
+        <div class="stat-value">{{ pendingCount }}</div>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon icon-green">✓</div>
+      <div class="stat-info">
+        <div class="stat-label">Accepted</div>
+        <div class="stat-value">{{ acceptedCount }}</div>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon icon-purple">🔄</div>
+      <div class="stat-info">
+        <div class="stat-label">Overridden</div>
+        <div class="stat-value">{{ overriddenCount }}</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Middle Grid: Document Preview & Classification Examples & Architecture -->
+  <div class="dashboard-grid">
+    <!-- Left Card: Document PDF Preview Example -->
+    <div class="card pdf-preview-card">
+      <div class="card-header">
+        <div class="doc-header-info">
+          <span class="pdf-icon">📄</span>
+          <span class="doc-filename">safety_report_001.pdf</span>
+        </div>
+        <div class="pdf-controls">
+          <span>1 / 3</span>
+          <span>100%</span>
+        </div>
+      </div>
+      <div class="card-body pdf-mock-body">
+        <div class="pdf-page-preview">
+          <div class="doc-badge-preview">Page 1 of 3</div>
+          <h3 class="pdf-doc-title">Adverse Event Report</h3>
+          <div class="pdf-section">
+            <h4>Patient Information</h4>
+            <p><strong>Age:</strong> 52 | <strong>Gender:</strong> Female</p>
+            <p><strong>Medical History:</strong> Hypertension</p>
+          </div>
+          <div class="pdf-section">
+            <h4>Product Information</h4>
+            <p><strong>Drug Name:</strong> CardioFix | <strong>Dose:</strong> 50 mg</p>
+            <p><strong>Route:</strong> Oral | <strong>Start Date:</strong> 2025-04-01</p>
+          </div>
+          <div class="pdf-section">
+            <h4>Reaction Details</h4>
+            <p><strong>Reaction:</strong> Rash (maculopapular, moderate)</p>
+            <p><strong>Outcome:</strong> Hospitalization required</p>
+          </div>
+          <div class="pdf-section">
+            <h4>Reporter</h4>
+            <p><strong>Name:</strong> Dr. Smith (Physician, USA)</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Middle Card: Classification Examples -->
+    <div class="card categories-card">
+      <div class="card-header">
+        <h2 class="card-title">Classification Categories</h2>
+      </div>
+      <div class="card-body cat-body">
+        <div class="cat-box cat-icsr">
+          <div class="cat-header">
+            <span class="cat-tag tag-icsr">Safety Report (ICSR)</span>
+            <span class="cat-freq">High Priority</span>
+          </div>
+          <p class="cat-desc">Patient had a bad reaction to a drug or adverse medical event.</p>
+        </div>
+
+        <div class="cat-box cat-pqc">
+          <div class="cat-header">
+            <span class="cat-tag tag-pqc">Quality Complaint (PQC)</span>
+            <span class="cat-freq">Medium Priority</span>
+          </div>
+          <p class="cat-desc">Physical issue with product (e.g., broken seal, wrong color, damaged package).</p>
+        </div>
+
+        <div class="cat-box cat-mi">
+          <div class="cat-header">
+            <span class="cat-tag tag-mi">Info Request (MI)</span>
+            <span class="cat-freq">Standard</span>
+          </div>
+          <p class="cat-desc">Medical inquiry or question about product (e.g., dosage, interactions).</p>
+        </div>
+
+        <div class="cat-box cat-nr">
+          <div class="cat-header">
+            <span class="cat-tag tag-nr">Not Relevant</span>
+            <span class="cat-freq">Filtered</span>
+          </div>
+          <p class="cat-desc">Spam, marketing flyers, internal newsletter messages.</p>
+        </div>
+
+        <!-- AI Extraction Fields Note -->
+        <div class="ai-fields-box">
+          <div class="ai-fields-title">AI Extracted Key Fields</div>
+          <ul class="ai-fields-list">
+            <li><strong>Patient:</strong> Age, gender, medical history</li>
+            <li><strong>Reporter:</strong> Who, role, country</li>
+            <li><strong>Product:</strong> Drug, dose, dates</li>
+            <li><strong>Reaction:</strong> What, when, outcome</li>
+            <li><strong>Severity:</strong> Hospitalization / death / etc.</li>
+            <li><strong>Source References:</strong> Page numbers & coordinates</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Card: Architecture Overview -->
+    <div class="card arch-card">
+      <div class="card-header">
+        <h2 class="card-title">Architecture Overview</h2>
+      </div>
+      <div class="card-body arch-body">
+        <div class="arch-flow">
+          <div class="arch-node node-angular">
+            <div class="node-badge">🅰️ Angular</div>
+            <div class="node-label">Frontend Dashboard</div>
+          </div>
+          <div class="arch-arrow">→</div>
+          <div class="arch-node node-fastapi">
+            <div class="node-badge">⚡ FastAPI</div>
+            <div class="node-label">Backend API</div>
+          </div>
+          <div class="arch-arrow">→</div>
+          <div class="arch-node node-ai">
+            <div class="node-badge">🤖 Gemini AI</div>
+            <div class="node-label">Classification & OCR</div>
+          </div>
+          <div class="arch-arrow">→</div>
+          <div class="arch-node node-oracle">
+            <div class="node-badge">💾 Oracle</div>
+            <div class="node-label">Database Store</div>
+          </div>
+        </div>
+
+        <div class="pipeline-steps">
+          <div class="step-item">
+            <span class="step-icon">📩</span>
+            <span class="step-txt">Email Ingestion</span>
+          </div>
+          <div class="step-item">
+            <span class="step-icon">📄</span>
+            <span class="step-txt">PDF Processing (PyMuPDF / OCR)</span>
+          </div>
+          <div class="step-item">
+            <span class="step-icon">🧠</span>
+            <span class="step-txt">Gemini API Extraction</span>
+          </div>
+          <div class="step-item">
+            <span class="step-icon">👤</span>
+            <span class="step-txt">Human Review & Approval</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Key Features Footer Bar -->
+  <div class="features-bar">
+    <div class="feature-item">
+      <span class="f-icon">📩</span>
+      <div class="f-text">
+        <strong>Email Processing</strong>
+        <span>Automated Ingestion</span>
+      </div>
+    </div>
+
+    <div class="feature-item">
+      <span class="f-icon">📄</span>
+      <div class="f-text">
+        <strong>Multi-format PDF Support</strong>
+        <span>Digital, Scanned, Articles</span>
+      </div>
+    </div>
+
+    <div class="feature-item">
+      <span class="f-icon">🧠</span>
+      <div class="f-text">
+        <strong>AI Classification</strong>
+        <span>4 Categories with Confidence</span>
+      </div>
+    </div>
+
+    <div class="feature-item">
+      <span class="f-icon">📊</span>
+      <div class="f-text">
+        <strong>Structured Fact Extraction</strong>
+        <span>With page source references</span>
+      </div>
+    </div>
+
+    <div class="feature-item">
+      <span class="f-icon">👤</span>
+      <div class="f-text">
+        <strong>Human Review</strong>
+        <span>Accept or Override AI</span>
+      </div>
+    </div>
+
+    <div class="feature-item">
+      <span class="f-icon">🛡️</span>
+      <div class="f-text">
+        <strong>Audit Trail & Logs</strong>
+        <span>Full event traceability</span>
+      </div>
+    </div>
+  </div>
+</div>

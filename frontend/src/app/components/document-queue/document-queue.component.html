@@ -1,0 +1,190 @@
+<div class="queue-container">
+  <!-- Page Header -->
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">Document Queue</h1>
+      <p class="page-subtitle">Review and process AI-classified healthcare inbox documents.</p>
+    </div>
+    <div class="header-actions">
+      <div class="search-box">
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Search by subject, sender, or ID..."
+          [(ngModel)]="searchQuery"
+          (input)="onFilterChange()"
+        />
+      </div>
+      <button class="btn btn-primary" (click)="loadDocuments()" [disabled]="isLoading">
+        <span *ngIf="!isLoading">↻ Refresh</span>
+        <span *ngIf="isLoading">Loading...</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Stat Metric Cards -->
+  <div class="stats-grid">
+    <div class="stat-card" (click)="selectedReviewStatus = 'ALL'; onFilterChange()">
+      <div class="stat-icon icon-blue">📄</div>
+      <div class="stat-info">
+        <div class="stat-label">Total Documents</div>
+        <div class="stat-value">{{ totalDocs }}</div>
+      </div>
+    </div>
+
+    <div class="stat-card" (click)="selectedReviewStatus = 'PENDING_REVIEW'; onFilterChange()">
+      <div class="stat-icon icon-amber">⏳</div>
+      <div class="stat-info">
+        <div class="stat-label">Pending Review</div>
+        <div class="stat-value">{{ pendingCount }}</div>
+      </div>
+    </div>
+
+    <div class="stat-card" (click)="selectedReviewStatus = 'ACCEPTED'; onFilterChange()">
+      <div class="stat-icon icon-green">✓</div>
+      <div class="stat-info">
+        <div class="stat-label">Accepted</div>
+        <div class="stat-value">{{ acceptedCount }}</div>
+      </div>
+    </div>
+
+    <div class="stat-card" (click)="selectedReviewStatus = 'OVERRIDDEN'; onFilterChange()">
+      <div class="stat-icon icon-purple">🔄</div>
+      <div class="stat-info">
+        <div class="stat-label">Overridden</div>
+        <div class="stat-value">{{ overriddenCount }}</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Filter Selector Bar -->
+  <div class="filter-bar">
+    <div class="filter-group">
+      <label for="category-filter">Category:</label>
+      <select
+        id="category-filter"
+        class="form-select"
+        [(ngModel)]="selectedCategory"
+        (change)="onFilterChange()"
+      >
+        <option *ngFor="let opt of categoryOptions" [value]="opt.value">{{ opt.label }}</option>
+      </select>
+    </div>
+
+    <div class="filter-group">
+      <label for="status-filter">Review Status:</label>
+      <select
+        id="status-filter"
+        class="form-select"
+        [(ngModel)]="selectedReviewStatus"
+        (change)="onFilterChange()"
+      >
+        <option *ngFor="let opt of reviewStatusOptions" [value]="opt.value">{{ opt.label }}</option>
+      </select>
+    </div>
+
+    <div class="filter-summary">
+      Showing <strong>{{ filteredDocuments.length }}</strong> of <strong>{{ documents.length }}</strong> items
+    </div>
+  </div>
+
+  <!-- Error Alert -->
+  <div *ngIf="errorMessage" class="alert alert-error">
+    <strong>Error:</strong> {{ errorMessage }}
+  </div>
+
+  <!-- Queue Table Card -->
+  <div class="table-card">
+    <div *ngIf="isLoading" class="loading-state">
+      <div class="spinner"></div>
+      <p>Fetching documents from queue...</p>
+    </div>
+
+    <div *ngIf="!isLoading && filteredDocuments.length === 0" class="empty-state">
+      <div class="empty-icon">📂</div>
+      <h3>No documents found</h3>
+      <p>There are currently no documents matching your selected filters.</p>
+      <button class="btn btn-secondary" (click)="searchQuery = ''; selectedCategory = 'ALL'; selectedReviewStatus = 'ALL'; onFilterChange()">
+        Clear Filters
+      </button>
+    </div>
+
+    <div *ngIf="!isLoading && filteredDocuments.length > 0" class="table-responsive">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th scope="col" style="width: 8%;">ID</th>
+            <th scope="col" style="width: 24%;">Subject</th>
+            <th scope="col" style="width: 18%;">Sender</th>
+            <th scope="col" style="width: 12%;">Date</th>
+            <th scope="col" style="width: 12%;">Category</th>
+            <th scope="col" style="width: 9%;">Confidence</th>
+            <th scope="col" style="width: 9%;">Status</th>
+            <th scope="col" style="width: 10%;">Review Status</th>
+            <th scope="col" style="width: 8%; text-align: center;">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            *ngFor="let doc of filteredDocuments"
+            (click)="openReview(doc)"
+            class="clickable-row"
+          >
+            <td class="cell-id">
+              <span class="id-pill">DOC-00{{ doc.id }}</span>
+            </td>
+
+            <td class="cell-subject">
+              <div class="subject-text" [title]="doc.subject || doc.filename">
+                {{ doc.subject || doc.filename }}
+              </div>
+            </td>
+
+            <td class="cell-sender">
+              <span class="sender-text" [title]="doc.sender || 'Not stated'">
+                {{ doc.sender || 'Not stated' }}
+              </span>
+            </td>
+
+            <td class="cell-date">
+              {{ formatDate(doc.received_date || doc.created_at) }}
+            </td>
+
+            <td class="cell-category">
+              <span [class]="getCategoryBadgeClass(doc.primary_category)">
+                {{ getCategoryLabel(doc.primary_category) }}
+              </span>
+            </td>
+
+            <td class="cell-confidence">
+              <span class="confidence-value" *ngIf="doc.confidence !== null && doc.confidence !== undefined">
+                {{ doc.confidence.toFixed(2) }}
+              </span>
+              <span class="not-stated" *ngIf="doc.confidence === null || doc.confidence === undefined">
+                -
+              </span>
+            </td>
+
+            <td class="cell-proc-status">
+              <span [class]="getProcessingStatusBadgeClass(doc.processing_status)">
+                {{ doc.processing_status }}
+              </span>
+            </td>
+
+            <td class="cell-review-status">
+              <span [class]="getReviewStatusBadgeClass(doc.review_status)">
+                {{ formatReviewStatus(doc.review_status) }}
+              </span>
+            </td>
+
+            <td class="cell-actions" style="text-align: center;">
+              <button class="btn btn-view" (click)="$event.stopPropagation(); openReview(doc)">
+                View
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

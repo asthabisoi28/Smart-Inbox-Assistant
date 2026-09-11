@@ -1,0 +1,73 @@
+<div class="app-container">
+  <!-- Dark Navy Left Sidebar -->
+  <aside class="sidebar">
+    <!-- Brand Section -->
+    <div class="sidebar-brand">
+      <div class="brand-logo">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="logo-icon">
+          <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"/>
+        </svg>
+      </div>
+      <div class="brand-text">
+        <h1 class="brand-title">Smart Inbox Assistant</h1>
+        <p class="brand-subtitle">Healthcare Company</p>
+      </div>
+    </div>
+
+    <!-- Navigation Menu -->
+    <nav class="sidebar-nav">
+      <a routerLink="/home" routerLinkActive="active" class="nav-item">
+        <span class="nav-icon">🏠</span>
+        <span class="nav-label">Home</span>
+      </a>
+
+      <a routerLink="/queue" routerLinkActive="active" class="nav-item">
+        <span class="nav-icon">📋</span>
+        <span class="nav-label">Document Queue</span>
+      </a>
+
+      <a routerLink="/processed" routerLinkActive="active" class="nav-item">
+        <span class="nav-icon">✅</span>
+        <span class="nav-label">Processed Documents</span>
+      </a>
+
+      <a routerLink="/settings" routerLinkActive="active" class="nav-item">
+        <span class="nav-icon">⚙️</span>
+        <span class="nav-label">Settings</span>
+      </a>
+    </nav>
+
+    <!-- Reviewer User Profile (Bottom Sidebar) -->
+    <div class="sidebar-footer">
+      <div class="user-card">
+        <div class="user-avatar">👤</div>
+        <div class="user-info">
+          <div class="user-name">Reviewer</div>
+          <div class="user-email">reviewer&#64;company.com</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main Content Area -->
+  <div class="main-wrapper">
+    <!-- Top Header Bar -->
+    <header class="top-header">
+      <div class="header-left">
+        <span class="system-status-dot"></span>
+        <span class="system-status-text">AI Inbox Service Active</span>
+      </div>
+      <div class="header-right">
+        <div class="header-stat-pill">
+          <span class="stat-lbl">Environment:</span>
+          <span class="stat-val">Production Demo</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Route Views -->
+    <main class="content-body">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+</div>

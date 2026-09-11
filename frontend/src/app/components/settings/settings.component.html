@@ -1,0 +1,95 @@
+<div class="settings-container">
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">Settings</h1>
+      <p class="page-subtitle">Configure AI triage rules, API endpoints, and reviewer options.</p>
+    </div>
+    <div>
+      <button class="btn btn-primary" (click)="saveSettings()">Save Configuration</button>
+    </div>
+  </div>
+
+  <div *ngIf="showSavedAlert" class="alert alert-success">
+    ✓ Settings saved successfully.
+  </div>
+
+  <div class="settings-grid">
+    <!-- Card 1: API & Model Config -->
+    <div class="card">
+      <div class="card-header">
+        <h2 class="card-title">AI & API Configuration</h2>
+      </div>
+      <div class="card-body form-list">
+        <div class="form-group">
+          <label for="api-endpoint">FastAPI Backend Endpoint:</label>
+          <input id="api-endpoint" type="text" class="form-control" [(ngModel)]="apiEndpoint" />
+        </div>
+
+        <div class="form-group">
+          <label for="gemini-model">Gemini Model:</label>
+          <select id="gemini-model" class="form-select" [(ngModel)]="geminiModel">
+            <option value="gemini-1.5-pro">Gemini 1.5 Pro (Recommended for Complex Clinical Reports)</option>
+            <option value="gemini-1.5-flash">Gemini 1.5 Flash (Fast Triage)</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="conf-slider">Auto-Triage Confidence Threshold ({{ autoTriageConfidence }}%):</label>
+          <input id="conf-slider" type="range" min="50" max="98" class="range-slider" [(ngModel)]="autoTriageConfidence" />
+          <span class="hint">Cases below {{ autoTriageConfidence }}% confidence will trigger mandatory human reviewer approval.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 2: Email Ingestion Settings -->
+    <div class="card">
+      <div class="card-header">
+        <h2 class="card-title">Email Ingestion & IMAP</h2>
+      </div>
+      <div class="card-body form-list">
+        <div class="form-group toggle-group">
+          <label for="enable-ingestion">Enable Active Email Polling:</label>
+          <input id="enable-ingestion" type="checkbox" [(ngModel)]="enableEmailIngestion" />
+        </div>
+
+        <div class="form-group">
+          <label for="poll-interval">Polling Frequency (Minutes):</label>
+          <input id="poll-interval" type="number" class="form-control" [(ngModel)]="pollIntervalMinutes" min="1" max="60" />
+        </div>
+
+        <div class="form-group">
+          <label>Supported Formats:</label>
+          <div class="format-tags">
+            <span class="tag">Digital PDF</span>
+            <span class="tag">Scanned OCR</span>
+            <span class="tag">Handwritten Notes</span>
+            <span class="tag">Spanish / French</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 3: Reviewer Profile -->
+    <div class="card">
+      <div class="card-header">
+        <h2 class="card-title">Reviewer Profile</h2>
+      </div>
+      <div class="card-body form-list">
+        <div class="form-group">
+          <label for="reviewer-name">Reviewer Name:</label>
+          <input id="reviewer-name" type="text" class="form-control" [(ngModel)]="reviewerName" />
+        </div>
+
+        <div class="form-group">
+          <label for="reviewer-email">Email Address:</label>
+          <input id="reviewer-email" type="email" class="form-control" [(ngModel)]="reviewerEmail" />
+        </div>
+
+        <div class="form-group">
+          <label for="reviewer-role">Healthcare Role / Title:</label>
+          <input id="reviewer-role" type="text" class="form-control" [(ngModel)]="reviewerRole" />
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

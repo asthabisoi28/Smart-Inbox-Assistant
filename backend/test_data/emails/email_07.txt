@@ -1,0 +1,8 @@
+From: grace@example.com
+To: reviewer@example.com
+Subject: Product Quality Complaint - Case 101
+
+The packaging of Drug D was damaged upon arrival. The blister pack was torn, but the tablets appear intact. Please advise on further steps.
+
+Regards,
+Grace
